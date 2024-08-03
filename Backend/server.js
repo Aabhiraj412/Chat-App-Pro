@@ -15,7 +15,9 @@ import connecttodb from './DB/connect.js';
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 
-const app = express();
+// const app = express();
+
+import { app, server } from './Socket/socket.js';
 
 // app.post('/', (req,res)=>{
 //     res.send("Abhiraj is Great");
@@ -28,7 +30,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/user', userRouter);
 
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     connecttodb()
     console.log(`Server Listening at port https://localhost:${PORT}`);
 });

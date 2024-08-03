@@ -1,19 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import useConversation from '../../../../store/useConversation'
 
 function Header() {
+  const {selectedConversation,setSelectedConversation} = useConversation()
+  
   return (
     <div className='rounded-lg h-12 flex justify-start items-center p-5
     bg-gradient-to-r from-sky-500 to-indigo-500'>
         <div className="h-10 avatar">
             <div className = "rounded-full">
-                <img src="
-                https://avatar.iran.liara.run/public/boy?username=Abhiraj
-                // https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg
-                    " />
+                <img src={selectedConversation.profilepic}/>
             </div>
         </div>
         <div>
-            <h1 className='text-white font-bold ml-5'>Name</h1>
+            <h1 className='text-white font-bold ml-5'>{selectedConversation.fullname}</h1>
         </div>
     </div>
   )

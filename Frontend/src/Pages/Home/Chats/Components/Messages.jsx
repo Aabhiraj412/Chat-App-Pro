@@ -1,35 +1,45 @@
 import React from 'react'
+import useConversation from '../../../../store/useConversation'
+import { useAuthContext } from '../../../../Context/AuthContext'
+// import {extractTime} from '../../utils'
 
-function Messages() {
+function Messages(mess) {
+    const formatTime = extractTime(mess.message.createdAt)
+    const {authUser} = useAuthContext()
+    const {selectedConversation} = useConversation()
+    
+    function extractTime(e){
+        const d = new Date(e)
+        const h = padZero(d.getHours());
+        const m = padZero(d.getMinutes());
+        return `${h}:${m}`
+    }
+
+    function padZero(n){
+        return n.toString().padStart(2,'0');
+    }
+
+    const me = mess.message.senderId===authUser._id
+    // if(me){
+    //     console.log("mess: ",mess.message.message)
+    // }
   return (
     <div>
-        <div className="chat chat-start">
+        <div className={`chat ${me?'chat-end':'chat-start'}`}>
             <div className="chat-image avatar">
                 <div className="w-10 rounded-full">
                     <img
                         alt="Tailwind CSS chat bubble component"
-                        src="https://avatar.iran.liara.run/public/boy?username=Abhiraj" />
+                        src={me?authUser.profilepic:selectedConversation.profilepic} />
                 </div>
             </div>
             <div className="chat-footer">
-                <time className="text-sm">12:45</time>
+                <time className="text-sm">{formatTime}</time>
             </div>
-            <div className="chat-bubble bg-sky-500 bg-gradient-to-r from-sky-500 to-indigo-500 text-white">You were the Chosen One!
+            <div className={`chat-bubble ${me? 'bg-indigo-500':'bg-sky-500'} bg-gradient-to-r from-sky-500 to-indigo-500 text-white`}>{mess.message.message}
             </div>
         </div>
-        <div className="chat chat-end">
-            <div className="chat-image avatar">
-                <div className="w-10 rounded-full">
-                    <img
-                        alt="Tailwind CSS chat bubble component"
-                        src="https://avatar.iran.liara.run/public/boy?username=Prathvi" />
-                </div>
-            </div>
-            <div className="chat-footer">
-                <time className="text-xs opacity-50">12:46</time>
-            </div>
-            <div className="chat-bubble bg-fuchsia-500 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white">I hate you!    </div>
-            </div>
+        
     </div>
   )
 }
