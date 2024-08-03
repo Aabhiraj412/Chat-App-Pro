@@ -2,6 +2,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 // Routes
 import authRouter from './Routes/auth.routes.js';
@@ -14,6 +15,8 @@ import connecttodb from './DB/connect.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 8000;
+
+const __dirname = path.resolve()
 
 // const app = express();
 
@@ -29,6 +32,12 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/user', userRouter);
+
+app.use(express.static(path.join(__dirname, '/Frontend/dist')))
+
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname, 'Frontend','dist','index.html'))
+})
 
 server.listen(PORT,()=>{
     connecttodb()
